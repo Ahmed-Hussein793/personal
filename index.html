@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ahmed Hussein | Secure Web Developer</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === SYSTEM VARIABLES & BASICS === */
+        :root {
+            --bg-color: #0B0F19;
+            --glass-bg: rgba(15, 23, 42, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent-cyan: #00f2fe;
+            --accent-purple: #7928ca;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', 'Fira Code', sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        /* === PARTICLES CANVAS === */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* === MAIN PORTFOLIO WRAPPER === */
+        .portfolio-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1300px;
+            min-height: 90vh;
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: 300px 1fr 320px;
+            grid-template-rows: auto 1fr;
+            grid-template-areas: 
+                "left hero right"
+                "bottom bottom bottom";
+            gap: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* === GLASSMORPHISM STYLES === */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* === HERO CENTERPIECE (AVATAR) === */
+        .hero-centerpiece {
+            grid-area: hero;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 20;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: breatheShadow 4s ease-in-out infinite alternate;
+        }
+
+        /* Smooth RGB Rotating Border */
+        .avatar-container::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff007f, #7928ca, #00f2fe, #4facfe, #ff007f);
+            animation: rotateRGB 6s linear infinite;
+            z-index: -1;
+        }
+
+        .avatar-container::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, #ff007f, #7928ca, #00f2fe, #4facfe, #ff007f);
+            animation: rotateRGB 6s linear infinite;
+            filter: blur(15px);
+            opacity: 0.7;
+            z-index: -2;
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #0b0f19;
+            background: #1e293b;
+        }
+
+        /* === ENTRANCE & IDLE ANIMATION STAGES === */
+        
+        /* Phase 1 & 2: Orbital entrance & transition */
+        .orbital-phase {
+            animation: orbitEntrance 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        /* Phase 3: Smooth Idle Floating Wave Effect */
+        .idle-floating-left {
+            animation: floatWaveLeft 5s ease-in-out infinite alternate 2.5s;
+        }
+        .idle-floating-right {
+            animation: floatWaveRight 5.5s ease-in-out infinite alternate 2.7s;
+        }
+        .idle-floating-bottom {
+            animation: floatWaveBottom 6s ease-in-out infinite alternate 2.9s;
+        }
+
+        /* === SECTION 1: SOCIAL MEDIA (LEFT) === */
+        .social-section {
+            grid-area: left;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .social-section h3 {
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 500;
+            border: 1px solid transparent;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-link i {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Custom Social Glow Colors */
+        .social-link[data-platform="github"]:hover {
+            border-color: #fff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            color: #fff;
+        }
+        .social-link[data-platform="telegram"]:hover {
+            border-color: #24A1DE;
+            box-shadow: 0 0 20px rgba(36, 161, 222, 0.4);
+            color: #24A1DE;
+        }
+        .social-link[data-platform="instagram"]:hover {
+            border-color: #E1306C;
+            box-shadow: 0 0 20px rgba(225, 48, 108, 0.4);
+            color: #E1306C;
+        }
+        .social-link[data-platform="tellonym"]:hover {
+            border-color: #FF0055;
+            box-shadow: 0 0 20px rgba(255, 0, 85, 0.4);
+            color: #FF0055;
+        }
+        .social-link[data-platform="email"]:hover {
+            border-color: #ea4335;
+            box-shadow: 0 0 20px rgba(234, 67, 53, 0.4);
+            color: #ea4335;
+        }
+
+        .social-link:hover i {
+            transform: scale(1.2) rotate(8deg);
+        }
+
+        /* === SECTION 2: SKILLS (RIGHT) === */
+        .skills-section {
+            grid-area: right;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .skills-section h3 {
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badges-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            perspective: 1000px;
+        }
+
+        .skill-badge {
+            padding: 0.5rem 0.9rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .skill-badge:hover {
+            background: rgba(0, 242, 254, 0.1);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+            color: #fff;
+        }
+
+        /* === SECTION 3: BIO & CONTACT FORM (BOTTOM) === */
+        .bottom-section {
+            grid-area: bottom;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Bio Details */
+        .bio-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .bio-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .bio-header h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 30%, var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .bio-tag {
+            font-size: 0.85rem;
+            padding: 3px 10px;
+            border-radius: 20px;
+            background: rgba(121, 40, 202, 0.3);
+            border: 1px solid var(--accent-purple);
+            color: #d8b4fe;
+            font-weight: 600;
+        }
+
+        .bio-role {
+            font-size: 1.1rem;
+            color: var(--accent-cyan);
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bio-description {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Contact Form */
+        .contact-box h3 {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #fff;
+            outline: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .submit-btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-cyan));
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(121, 40, 202, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.5);
+        }
+
+        /* === KEYFRAME ANIMATIONS === */
+        
+        @keyframes rotateRGB {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes breatheShadow {
+            0% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
+            100% { box-shadow: 0 0 50px rgba(121, 40, 202, 0.5); }
+        }
+
+        /* Phase 1 & 2 Entrance Rotation */
+        @keyframes orbitEntrance {
+            0% {
+                opacity: 0;
+                transform: rotate(180deg) scale(0.2);
+            }
+            60% {
+                opacity: 0.8;
+                transform: rotate(-10deg) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: rotate(0deg) scale(1);
+            }
+        }
+
+        /* Phase 3 Idle Waves */
+        @keyframes floatWaveLeft {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-12px) rotate(-1deg); }
+        }
+        @keyframes floatWaveRight {
+            0% { transform: translateY(0px) rotate(0deg); }
+            100% { transform: translateY(-14px) rotate(1deg); }
+        }
+        @keyframes floatWaveBottom {
+            0% { transform: translateY(0px); }
+            100% { transform: translateY(-10px); }
+        }
+
+        /* === RESPONSIVE LAYOUT (MOBILE / TABLET) === */
+        @media (max-width: 992px) {
+            .portfolio-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+                grid-template-areas: 
+                    "hero"
+                    "bottom"
+                    "right"
+                    "left";
+                padding: 1rem;
+                gap: 1.5rem;
+                margin-top: 2rem;
+            }
+
+            .bottom-section {
+                grid-template-columns: 1fr;
+            }
+
+            .avatar-container {
+                width: 140px;
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <main class="portfolio-container">
+
+        <div class="hero-centerpiece">
+            <div class="avatar-container">
+                <img src="assets/personal-photo.jpg" alt="Ahmed Hussein" class="avatar-img">
+            </div>
+        </div>
+
+        <section class="glass-card social-section orbital-phase idle-floating-left">
+            <h3><i class="fa-solid fa-link"></i> شبكات التواصل</h3>
+            
+            <a href="mailto:hsynghdban4@gmail.com" class="social-link" data-platform="email" target="_blank">
+                <i class="fa-solid fa-envelope"></i>
+                <span>البريد الإلكتروني</span>
+            </a>
+            <a href="https://github.com/Ahmed-Hussein793" class="social-link" data-platform="github" target="_blank">
+                <i class="fa-brands fa-github"></i>
+                <span>GitHub</span>
+            </a>
+            <a href="https://t.me/A_h_dev" class="social-link" data-platform="telegram" target="_blank">
+                <i class="fa-brands fa-telegram"></i>
+                <span>Telegram</span>
+            </a>
+            <a href="https://www.instagram.com/a.h_dev" class="social-link" data-platform="instagram" target="_blank">
+                <i class="fa-brands fa-instagram"></i>
+                <span>Instagram</span>
+            </a>
+            <a href="https://tellonym.me/a.h_dev" class="social-link" data-platform="tellonym" target="_blank">
+                <i class="fa-solid fa-comment-dots"></i>
+                <span>Tellonym</span>
+            </a>
+        </section>
+
+        <section class="glass-card skills-section orbital-phase idle-floating-right">
+            <h3><i class="fa-solid fa-microchip"></i> المهارات والتقنيات</h3>
+            <div class="badges-wrapper">
+                <span class="skill-badge">HTML5</span>
+                <span class="skill-badge">CSS3</span>
+                <span class="skill-badge">JavaScript</span>
+                <span class="skill-badge">Node.js</span>
+                <span class="skill-badge">Express.js</span>
+                <span class="skill-badge">React.js</span>
+                <span class="skill-badge">Next.js</span>
+                <span class="skill-badge">MongoDB</span>
+                <span class="skill-badge">MySQL</span>
+                <span class="skill-badge">Bash Script</span>
+                <span class="skill-badge">Web Pentesting</span>
+                <span class="skill-badge">Networks</span>
+                <span class="skill-badge">Nginx</span>
+                <span class="skill-badge">Apache</span>
+            </div>
+        </section>
+
+        <div class="bottom-section orbital-phase idle-floating-bottom">
+            
+            <section class="glass-card bio-box">
+                <div class="bio-header">
+                    <h1>Ahmed Hussein</h1>
+                    <span class="bio-tag">17 سنة</span>
+                </div>
+                <div class="bio-role">
+                    <i class="fa-solid fa-terminal"></i> Secure Web Developer
+                </div>
+                <p class="bio-description">
+                    مطور ويب متخصص في بناء تطبيقات ويب عالية الأداء ومحصنة أمنياً. أجمع بين شغف تطوير الواجهات والخلفيات البرمجية الحديثة (Full-Stack) مع الفهم العميق لاختبار الاختراق وحماية التطبيقات من الثغرات البرمجية.
+                </p>
+            </section>
+
+            <section class="glass-card contact-box">
+                <h3><i class="fa-solid fa-paper-plane"></i> تواصل معي مباشرة</h3>
+                <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
+                    <input type="hidden" name="access_key" value="2c1bff1c-b300-40e2-a53e-2f20f710259c">
+                    
+                    <div class="form-group">
+                        <input type="text" name="name" placeholder="الاسم الكريم" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="email" placeholder="البريد الإلكتروني" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="message" rows="3" placeholder="اكتب رسالتك هنا..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <span>إرسال الرسالة</span>
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                </form>
+            </section>
+
+        </div>
+
+    </main>
+
+    <script>
+        /* === 1. NIGHT SKY PARTICLES CANVAS === */
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray = [];
+        const numberOfParticles = 70;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = (Math.random() - 0.5) * 0.3;
+                this.opacity = Math.random() * 0.8 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(0, 242, 254, ${this.opacity})`;
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = '#00f2fe';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            for (let i = 0; i < numberOfParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particlesArray.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        /* === 2. 3D TILT EFFECT ON SKILL BADGES === */
+        const badges = document.querySelectorAll('.skill-badge');
+
+        badges.forEach(badge => {
+            badge.addEventListener('mousemove', (e) => {
+                const rect = badge.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                badge.style.transform = `perspective(300px) rotateX(${-y / 5}deg) rotateY(${x / 5}deg) scale(1.1)`;
+            });
+
+            badge.addEventListener('mouseleave', () => {
+                badge.style.transform = 'perspective(300px) rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        });
+
+        /* === 3. SIMPLE FORM HANDLING NOTIFICATION === */
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            const btn = this.querySelector('.submit-btn');
+            btn.innerHTML = `<span>جاري الإرسال...</span> <i class="fa-solid fa-spinner fa-spin"></i>`;
+        });
+    </script>
+</body>
+</html>
